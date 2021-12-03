@@ -15,9 +15,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const users_1 = __importDefault(require("../models/users"));
 const createNewUser = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const body = req.body;
-        const { id } = body;
-        const user = new users_1.default({});
+        // const body: userData = req.body as userData;
+        // const { id } = body;
+        const user = new users_1.default(Object.assign({}, req.body));
         yield user.save();
     }
     catch (err) { }

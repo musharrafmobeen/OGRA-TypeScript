@@ -9,9 +9,9 @@ const createNewUser = async (
   next: NextFunction
 ) => {
   try {
-    const body: userData = req.body as userData;
-    const { id } = body;
-    const user = new userModel({});
+    // const body: userData = req.body as userData;
+    // const { id } = body;
+    const user = new userModel({ ...req.body });
 
     await user.save();
   } catch (err) {}
