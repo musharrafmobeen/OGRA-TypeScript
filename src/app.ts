@@ -7,7 +7,7 @@ import morgan from "morgan";
 import userRouter from "./api/v1/routes/user";
 
 const app = express();
-const PORT = process.env.PORT || 5001;
+const PORT = process.env.PORT || 5000;
 dotenv.config();
 
 const uri =
