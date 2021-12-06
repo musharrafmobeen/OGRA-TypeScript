@@ -24,9 +24,9 @@ const addUser: RequestHandler = async (req, res, next) => {
       });
     }
   } catch (err: any) {
-    err = JSON.parse(err);
+    err = JSON.parse(err.message);
 
-    return res.status(500).json({
+    return res.status(err.statusCode).json({
       error: {
         status: err.status,
         statusCode: err.statusCode,

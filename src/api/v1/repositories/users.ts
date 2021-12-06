@@ -9,11 +9,13 @@ import { getSalt } from "../helpers/environmentVariables";
 const createNewUser = async (data: userData) => {
   try {
     const user = await userModel.findOne({ userName: data.userName }).exec();
-    if (!user) {
+    console.log("user", user);
+    if (user) {
       bcrypt.hash(data.password, getSalt(), async (err, password) => {
         if (err) {
           throwError("Failed", 500, "Error occurred while Registering a User.");
         }
+        console.log("adrak");
         if (data.userRole !== "OGRA Technical Team") {
           const userOMC = await userModel.findOne({ _id: data.id }).exec();
           data.OMC = userOMC.OMC;
@@ -31,10 +33,15 @@ const createNewUser = async (data: userData) => {
         return newUser;
       });
     } else {
-      throwError("Already Exists", 403, "User Already Exists");
+      // throwError("Already Exists", 403, "User Already Exists");
+      throw new Error(
+        '{status:"Already Exists", statusCode:403, errorMessage:"User Already Exists"}'
+      );
     }
   } catch (err) {
-    throwError("Failed", 500, "Error occurred while Registering a User");
+    throw new Error(
+      '{status:"Already Exists", statusCode:403, errorMessage:"User Already Exists"}'
+    );
   }
 };
 

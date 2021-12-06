@@ -4,4 +4,10 @@ const getSalt = (): string => {
   return salt;
 };
 
-export { getSalt };
+const getSecretKey = (): string => {
+  const key =
+    typeof process.env.JWT_KEY === "string" ? process.env.JWT_KEY : "key";
+  return key;
+};
+
+export { getSalt, getSecretKey };
