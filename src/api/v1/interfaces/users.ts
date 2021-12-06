@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 interface userData {
   id: mongoose.Schema.Types.ObjectId;
   userName: string;
+  userRole: string;
   password: string;
   userType:
     | "OGRA Technical Team"

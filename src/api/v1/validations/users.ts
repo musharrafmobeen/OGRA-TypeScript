@@ -31,37 +31,54 @@ const addUserValidation = async (userData: userData, req: Request) => {
         "password is Invalid. password should be larger than 8 characters, smaller than 15 characters and should contain no white spaces",
     });
   }
-  if (!mongoose.isValidObjectId(userData.OMC)) {
-    req.body.errors.push({
-      error: "Invalid Input",
-      location: "OMC",
-      message: "OMC is not a valid ObjectID",
-    });
+
+  if (!userData.OMC) {
+    req.body.OMC = null;
   }
 
-  if (!mongoose.isValidObjectId(userData.userIFEMLocation)) {
-    req.body.errors.push({
-      error: "Invalid Input",
-      location: "userIFEMLocation",
-      message: "userIFEMLocation is not a valid ObjectID",
-    });
+  if (!userData.userIFEMLocation) {
+    req.body.userIFEMLocation = null;
   }
 
-  if (!mongoose.isValidObjectId(userData.deployedDepot)) {
-    req.body.errors.push({
-      error: "Invalid Input",
-      location: "deployedDepot",
-      message: "deployedDepot is not a valid ObjectID",
-    });
+  if (!userData.deployedDepot) {
+    req.body.deployedDepot = null;
   }
 
-  if (!mongoose.isValidObjectId(userData.primaryDepot)) {
-    req.body.errors.push({
-      error: "Invalid Input",
-      location: "primaryDepot",
-      message: "primaryDepot is not a valid ObjectID",
-    });
+  if (!userData.primaryDepot) {
+    req.body.primaryDepot = null;
   }
+
+  // if (!mongoose.isValidObjectId(userData.OMC)) {
+  //   req.body.errors.push({
+  //     error: "Invalid Input",
+  //     location: "OMC",
+  //     message: "OMC is not a valid ObjectID",
+  //   });
+  // }
+
+  // if (!mongoose.isValidObjectId(userData.userIFEMLocation)) {
+  //   req.body.errors.push({
+  //     error: "Invalid Input",
+  //     location: "userIFEMLocation",
+  //     message: "userIFEMLocation is not a valid ObjectID",
+  //   });
+  // }
+
+  // if (!mongoose.isValidObjectId(userData.deployedDepot)) {
+  //   req.body.errors.push({
+  //     error: "Invalid Input",
+  //     location: "deployedDepot",
+  //     message: "deployedDepot is not a valid ObjectID",
+  //   });
+  // }
+
+  // if (!mongoose.isValidObjectId(userData.primaryDepot)) {
+  //   req.body.errors.push({
+  //     error: "Invalid Input",
+  //     location: "primaryDepot",
+  //     message: "primaryDepot is not a valid ObjectID",
+  //   });
+  // }
 };
 
 export { addUserValidation };

@@ -12,14 +12,25 @@ const addUser: RequestHandler = async (req, res, next) => {
         message: "User Data Validation Failed",
       });
     } else {
-      createUser(req.body);
+      const createdUser = await createUser(req.body);
+      return res.status(200).json({
+        message: "User Registered",
+        user: createdUser,
+        request: {
+          type: "POST",
+          description: "Register User",
+          URL: process.env.URL + "users/signup",
+        },
+      });
     }
-  } catch (err) {
+  } catch (err: any) {
+    err = JSON.parse(err);
+
     return res.status(500).json({
       error: {
-        status: "Failed",
-        statusCode: 500,
-        errorMessage: err,
+        status: err.status,
+        statusCode: err.statusCode,
+        errorMessage: err.errorMessage,
       },
       message: "Error occured while Registering a User.",
     });

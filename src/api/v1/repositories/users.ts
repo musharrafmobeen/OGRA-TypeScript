@@ -1,31 +1,22 @@
 import userModel from "../models/users";
 import mongoose from "mongoose";
-import bcrypt from "bcrypt";
+import bcrypt from "bcrypt-nodejs";
 import jwt from "jsonwebtoken";
+import { throwError } from "../helpers/errorHandler";
+import { userData } from "../interfaces/users";
+import { getSalt } from "../helpers/environmentVariables";
 
-const createNewUser = async (data: any) => {
+const createNewUser = async (data: userData) => {
   try {
-    const keys: string[] = Object.keys(data);
-    for (let i = 0; i < keys.length; i++) {
-      if (keys[i] in data) {
-        if (data.keys[i] === "") {
-          data.keys[i] = null;
-        }
-      }
-    }
-
     const user = await userModel.findOne({ userName: data.userName }).exec();
     if (!user) {
-      bcrypt.hash(data.password, 10, async (err, password) => {
+      bcrypt.hash(data.password, getSalt(), async (err, password) => {
         if (err) {
-          throw new Error("User Registration Failed");
+          throwError("Failed", 500, "Error occurred while Registering a User.");
         }
-        let OMC = null;
-        if (data.userRole === "OGRA Technical Team") {
-          OMC = data.OMC;
-        } else {
+        if (data.userRole !== "OGRA Technical Team") {
           const userOMC = await userModel.findOne({ _id: data.id }).exec();
-          OMC = userOMC.OMC;
+          data.OMC = userOMC.OMC;
         }
 
         const _id = new mongoose.Types.ObjectId(),
@@ -39,11 +30,12 @@ const createNewUser = async (data: any) => {
 
         return newUser;
       });
+    } else {
+      throwError("Already Exists", 403, "User Already Exists");
     }
-
-    // const user = new userModel({ ...data });
-    await user.save();
-  } catch (err) {}
+  } catch (err) {
+    throwError("Failed", 500, "Error occurred while Registering a User");
+  }
 };
 
 export { createNewUser };
