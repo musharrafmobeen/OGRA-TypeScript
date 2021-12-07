@@ -17,4 +17,9 @@ interface userData {
   userIFEMLocation: mongoose.Schema.Types.ObjectId;
 }
 
-export { userData };
+interface userLogin {
+  userName: string;
+  password: string;
+}
+
+export { userData, userLogin };

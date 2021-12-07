@@ -1,4 +1,4 @@
-import { userData } from "../interfaces/users";
+import { userData, userLogin } from "../interfaces/users";
 // import { body, validationResult } from "express-validator";
 import { Request } from "express";
 import mongoose from "mongoose";
@@ -81,4 +81,34 @@ const addUserValidation = async (userData: userData, req: Request) => {
   // }
 };
 
-export { addUserValidation };
+const userLoginValidation = async (credentials: userLogin, req: Request) => {
+  req.body.errors = [];
+
+  if (
+    credentials.userName.includes(" ") ||
+    credentials.userName.length > 15 ||
+    credentials.userName.length < 8
+  ) {
+    req.body.errors.push({
+      error: "Invalid Input",
+      location: "userName",
+      message:
+        "userName is Invalid. userName should be larger than 8 characters, smaller than 15 characters and should contain no white spaces",
+    });
+  }
+
+  if (
+    credentials.password.includes(" ") ||
+    credentials.password.length > 15 ||
+    credentials.password.length < 8
+  ) {
+    req.body.errors.push({
+      error: "Invalid Input",
+      location: "password",
+      message:
+        "password is Invalid. password should be larger than 8 characters, smaller than 15 characters and should contain no white spaces",
+    });
+  }
+};
+
+export { addUserValidation, userLoginValidation };

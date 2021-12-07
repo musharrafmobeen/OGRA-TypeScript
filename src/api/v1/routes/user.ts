@@ -1,8 +1,13 @@
 import { Router } from "express";
-import { addUser } from "../controllers/users";
+import { addUser, userLogin } from "../controllers/users";
 import { authentication } from "../middlewares/auth";
 const router = Router();
 
-router.post("/", addUser);
+router.post(
+  "/signup",
+  authentication(["OGRA Technical Team", "OMCs Management"]),
+  addUser
+);
+router.post("/login", userLogin);
 
 export default router;

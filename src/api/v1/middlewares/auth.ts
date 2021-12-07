@@ -2,8 +2,8 @@ import { NextFunction, Request, Response } from "express";
 import { getSecretKey } from "../helpers/environmentVariables";
 import jwt from "jsonwebtoken";
 
-const authentication = async (userTypes: string[]) => {
-  return async (req: Request, res: Response, next: NextFunction) => {
+const authentication = (userTypes: string[]) => {
+  return (req: Request, res: Response, next: NextFunction) => {
     try {
       if (req.headers.authorization) {
         const token = req.headers.authorization.split(" ")[1];
