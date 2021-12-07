@@ -3,7 +3,6 @@ import * as dotenv from "dotenv";
 import connect from "./config/dataBaseConfig";
 import cors from "cors";
 import morgan from "morgan";
-
 import userRouter from "./api/v1/routes/user";
 
 const app = express();
