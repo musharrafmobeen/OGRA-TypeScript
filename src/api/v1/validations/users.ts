@@ -1,113 +1,66 @@
 import { userData, userLogin } from "../interfaces/users";
-// import { body, validationResult } from "express-validator";
-import { Request } from "express";
+import { body, validationResult } from "express-validator";
+import { RequestHandler } from "express";
 import mongoose from "mongoose";
 
-const addUserValidation = async (userData: userData, req: Request) => {
-  req.body.errors = [];
+const addUserValidation: RequestHandler = async (req, res, next) => {
+  body("userName").isLength({ min: 8, max: 15 }).not().contains(" ");
+  body("password").isLength({ min: 8, max: 15 }).not().contains(" ");
+  body("id").isMongoId();
 
-  if (
-    userData.userName.includes(" ") ||
-    userData.userName.length > 15 ||
-    userData.userName.length < 8
-  ) {
-    req.body.errors.push({
-      error: "Invalid Input",
-      location: "userName",
-      message:
-        "userName is Invalid. userName should be larger than 8 characters, smaller than 15 characters and should contain no white spaces",
-    });
-  }
+  body("OMC").isMongoId();
 
-  if (
-    userData.password.includes(" ") ||
-    userData.password.length > 15 ||
-    userData.password.length < 8
-  ) {
-    req.body.errors.push({
-      error: "Invalid Input",
-      location: "password",
-      message:
-        "password is Invalid. password should be larger than 8 characters, smaller than 15 characters and should contain no white spaces",
-    });
-  }
-
-  if (!userData.OMC) {
-    req.body.OMC = null;
-  }
-
-  if (!userData.userIFEMLocation) {
+  if (!req.body.userIFEMLocation) {
     req.body.userIFEMLocation = null;
+  } else {
+    body("userIFEMLocation").isMongoId();
   }
 
-  if (!userData.deployedDepot) {
+  if (!req.body.deployedDepot) {
     req.body.deployedDepot = null;
+  } else {
+    body("deployedDepot").isMongoId();
   }
 
-  if (!userData.primaryDepot) {
+  if (!req.body.primaryDepot) {
     req.body.primaryDepot = null;
+  } else {
+    body("primaryDepot").isMongoId();
   }
 
-  // if (!mongoose.isValidObjectId(userData.OMC)) {
-  //   req.body.errors.push({
-  //     error: "Invalid Input",
-  //     location: "OMC",
-  //     message: "OMC is not a valid ObjectID",
-  //   });
-  // }
-
-  // if (!mongoose.isValidObjectId(userData.userIFEMLocation)) {
-  //   req.body.errors.push({
-  //     error: "Invalid Input",
-  //     location: "userIFEMLocation",
-  //     message: "userIFEMLocation is not a valid ObjectID",
-  //   });
-  // }
-
-  // if (!mongoose.isValidObjectId(userData.deployedDepot)) {
-  //   req.body.errors.push({
-  //     error: "Invalid Input",
-  //     location: "deployedDepot",
-  //     message: "deployedDepot is not a valid ObjectID",
-  //   });
-  // }
-
-  // if (!mongoose.isValidObjectId(userData.primaryDepot)) {
-  //   req.body.errors.push({
-  //     error: "Invalid Input",
-  //     location: "primaryDepot",
-  //     message: "primaryDepot is not a valid ObjectID",
-  //   });
-  // }
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({
+      error: {
+        status: "Invalid Data",
+        statusCode: 400,
+        errorMessage: "Data Sent is not valid",
+        errors: errors.array(),
+      },
+      message: "Data Sent is not valid",
+    });
+  } else {
+    next();
+  }
 };
 
-const userLoginValidation = async (credentials: userLogin, req: Request) => {
-  req.body.errors = [];
+const userLoginValidation: RequestHandler = async (req, res, next) => {
+  body("userName").isLength({ min: 8, max: 15 }).not().contains(" ");
+  body("password").isLength({ min: 8, max: 15 }).not().contains(" ");
 
-  if (
-    credentials.userName.includes(" ") ||
-    credentials.userName.length > 15 ||
-    credentials.userName.length < 8
-  ) {
-    req.body.errors.push({
-      error: "Invalid Input",
-      location: "userName",
-      message:
-        "userName is Invalid. userName should be larger than 8 characters, smaller than 15 characters and should contain no white spaces",
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({
+      error: {
+        status: "Invalid Data",
+        statusCode: 400,
+        errorMessage: "Data Sent is not valid",
+        errors: errors.array(),
+      },
+      message: "Data Sent is not valid",
     });
-  }
-
-  if (
-    credentials.password.includes(" ") ||
-    credentials.password.length > 15 ||
-    credentials.password.length < 8
-  ) {
-    req.body.errors.push({
-      error: "Invalid Input",
-      location: "password",
-      message:
-        "password is Invalid. password should be larger than 8 characters, smaller than 15 characters and should contain no white spaces",
-    });
+  } else {
+    next();
   }
 };
 
