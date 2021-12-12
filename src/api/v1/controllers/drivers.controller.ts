@@ -62,7 +62,7 @@ const getDrivers: RequestHandler = async (req, res, next) => {
 const updateDriver: RequestHandler = async (req, res, next) => {
   try {
     const data = req.body;
-    const _id = new mongoose.Schema.Types.ObjectId(req.params._id);
+    const _id = new mongoose.Types.ObjectId(req.params._id);
     const driver = await updateDriverService(_id, data);
     return res.status(200).json({
       message: "Driver Updated",
@@ -88,7 +88,7 @@ const updateDriver: RequestHandler = async (req, res, next) => {
 
 const deleteDriver: RequestHandler = async (req, res, next) => {
   try {
-    const _id = new mongoose.Schema.Types.ObjectId(req.params._id);
+    const _id = new mongoose.Types.ObjectId(req.params._id);
     const driver = await deleteDriverService(_id);
     return res.status(200).json({
       message: "Driver Deleted",

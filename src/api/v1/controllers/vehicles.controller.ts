@@ -116,7 +116,7 @@ const getDeletedVehicles: RequestHandler = async (req, res, next) => {
 const updateVehicle: RequestHandler = async (req, res, next) => {
   try {
     const data = req.body;
-    const _id = new mongoose.Schema.Types.ObjectId(req.params._id);
+    const _id = new mongoose.Types.ObjectId(req.params._id);
     const vehicle = await updateVehicleService(_id, data);
     return res.status(200).json({
       message: "Vehicle Updated",
@@ -143,7 +143,7 @@ const updateVehicle: RequestHandler = async (req, res, next) => {
 const updateVehicleOMCHistory: RequestHandler = async (req, res, next) => {
   try {
     const data = req.body;
-    const _id = new mongoose.Schema.Types.ObjectId(req.params._id);
+    const _id = new mongoose.Types.ObjectId(req.params._id);
     const vehicle = await updateVehicleOMCHistoryService(_id, data);
 
     return res.status(200).json({
@@ -170,7 +170,7 @@ const updateVehicleOMCHistory: RequestHandler = async (req, res, next) => {
 
 const deleteVehicle: RequestHandler = async (req, res, next) => {
   try {
-    const _id = new mongoose.Schema.Types.ObjectId(req.params._id);
+    const _id = new mongoose.Types.ObjectId(req.params._id);
     const vehicle = await deleteVehicleService(_id);
     return res.status(200).json({
       message: "Vehicle Deleted",

@@ -33,7 +33,10 @@ const getDistrictsService = async () => {
   }
 };
 
-const updateDistrictService = async (_id: mongoose.ObjectId, data: any) => {
+const updateDistrictService = async (
+  _id: mongoose.Types.ObjectId,
+  data: any
+) => {
   try {
     return await updateDistrictRepository(_id, data);
   } catch (err: any) {
@@ -50,7 +53,7 @@ const updateDistrictService = async (_id: mongoose.ObjectId, data: any) => {
   }
 };
 
-const deleteDistrictService = async (_id: mongoose.ObjectId) => {
+const deleteDistrictService = async (_id: mongoose.Types.ObjectId) => {
   try {
     return await deleteDistrictRepository(_id);
   } catch (err: any) {

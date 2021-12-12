@@ -13,6 +13,8 @@ import depotsRoutes from "./api/v1/routes/depots.routes";
 import driversRoutes from "./api/v1/routes/drivers.routes";
 import omcVehicleHistoryRoutes from "./api/v1/routes/omcVehicleHistory.routes";
 import vehiclesRoutes from "./api/v1/routes/vehicles.routes";
+import dispatchRoutes from "./api/v1/routes/dispatch.routes";
+import carriageContractorRoutes from "./api/v1/routes/carriageContractor.routes";
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -28,6 +30,8 @@ app.use(morgan("dev"));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
+app.use("/carriagecontractors", carriageContractorRoutes);
+app.use("/dispatches", dispatchRoutes);
 app.use("/vehicles", vehiclesRoutes);
 app.use("/history", omcVehicleHistoryRoutes);
 app.use("/drivers", driversRoutes);

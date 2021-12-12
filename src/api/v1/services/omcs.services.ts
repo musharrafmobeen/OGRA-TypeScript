@@ -34,7 +34,7 @@ const getOMCsService = async () => {
   }
 };
 
-const getAvailableDepotsService = async (OMC: mongoose.ObjectId) => {
+const getAvailableDepotsService = async (OMC: mongoose.Types.ObjectId) => {
   try {
     return await getAvailableDepotsRespository(OMC);
   } catch (error) {
@@ -44,7 +44,7 @@ const getAvailableDepotsService = async (OMC: mongoose.ObjectId) => {
   }
 };
 
-const updateOMCService = async (_id: mongoose.ObjectId, data: any) => {
+const updateOMCService = async (_id: mongoose.Types.ObjectId, data: any) => {
   try {
     return await updateOMCRespository(_id, data);
   } catch (err: any) {
@@ -61,7 +61,7 @@ const updateOMCService = async (_id: mongoose.ObjectId, data: any) => {
   }
 };
 
-const deleteOMCService = async (_id: mongoose.ObjectId) => {
+const deleteOMCService = async (_id: mongoose.Types.ObjectId) => {
   try {
     return await deleteOMCRespository(_id);
   } catch (err: any) {

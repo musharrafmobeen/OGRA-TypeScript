@@ -60,7 +60,7 @@ const getIfemLocation: RequestHandler = async (req, res, next) => {
 const updateIfemLocation: RequestHandler = async (req, res, next) => {
   try {
     const data = req.body;
-    const _id = new mongoose.Schema.Types.ObjectId(req.params._id);
+    const _id = new mongoose.Types.ObjectId(req.params._id);
     const IFEM_Location = await updateIfemLocationService(_id, data);
     return res.status(200).json({
       message: "IFEM Location Updated",
@@ -86,7 +86,7 @@ const updateIfemLocation: RequestHandler = async (req, res, next) => {
 
 const deleteIfemLocation: RequestHandler = async (req, res, next) => {
   try {
-    const _id = new mongoose.Schema.Types.ObjectId(req.params._id);
+    const _id = new mongoose.Types.ObjectId(req.params._id);
     const IFEM_Location = await deleteIfemLocationService(_id);
 
     return res.status(200).json({

@@ -61,7 +61,7 @@ const getDepots: RequestHandler = async (req, res, next) => {
 const updateDepot: RequestHandler = async (req, res, next) => {
   try {
     const data = req.body;
-    const _id = new mongoose.Schema.Types.ObjectId(req.params._id);
+    const _id = new mongoose.Types.ObjectId(req.params._id);
     const depot = await updateDepotService(_id, data);
     return res.status(200).json({
       message: "Depot Updated",
@@ -87,7 +87,7 @@ const updateDepot: RequestHandler = async (req, res, next) => {
 
 const deleteDepot: RequestHandler = async (req, res, next) => {
   try {
-    const _id = new mongoose.Schema.Types.ObjectId(req.params._id);
+    const _id = new mongoose.Types.ObjectId(req.params._id);
     const depot = await deleteDepotService(_id);
     return res.status(200).json({
       message: "Depot Deleted",

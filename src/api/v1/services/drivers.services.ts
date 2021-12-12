@@ -23,7 +23,10 @@ const addDriverService = async (data: any) => {
   }
 };
 
-const getDriversService = async (OMC: mongoose.ObjectId, userRole: string) => {
+const getDriversService = async (
+  OMC: mongoose.Types.ObjectId,
+  userRole: string
+) => {
   try {
     return await getDriversRepository(OMC, userRole);
   } catch (err: any) {
@@ -40,7 +43,7 @@ const getDriversService = async (OMC: mongoose.ObjectId, userRole: string) => {
   }
 };
 
-const updateDriverService = async (_id: mongoose.ObjectId, data: any) => {
+const updateDriverService = async (_id: mongoose.Types.ObjectId, data: any) => {
   try {
     return await updateDriverRepository(_id, data);
   } catch (err: any) {
@@ -57,7 +60,7 @@ const updateDriverService = async (_id: mongoose.ObjectId, data: any) => {
   }
 };
 
-const deleteDriverService = async (_id: mongoose.ObjectId) => {
+const deleteDriverService = async (_id: mongoose.Types.ObjectId) => {
   try {
     return await deleteDriverRepository(_id);
   } catch (err: any) {

@@ -23,7 +23,10 @@ const addDepotService = async (data: any) => {
   }
 };
 
-const getDepotsService = async (OMC: mongoose.ObjectId, userRole: string) => {
+const getDepotsService = async (
+  OMC: mongoose.Types.ObjectId,
+  userRole: string
+) => {
   try {
     return await getDepotsRepository(OMC, userRole);
   } catch (error) {
@@ -33,7 +36,7 @@ const getDepotsService = async (OMC: mongoose.ObjectId, userRole: string) => {
   }
 };
 
-const updateDepotService = async (_id: mongoose.ObjectId, data: any) => {
+const updateDepotService = async (_id: mongoose.Types.ObjectId, data: any) => {
   try {
     return await updateDepotRepository(_id, data);
   } catch (err: any) {
@@ -50,7 +53,7 @@ const updateDepotService = async (_id: mongoose.ObjectId, data: any) => {
   }
 };
 
-const deleteDepotService = async (_id: mongoose.ObjectId) => {
+const deleteDepotService = async (_id: mongoose.Types.ObjectId) => {
   try {
     return await deleteDepotRepository(_id);
   } catch (err: any) {

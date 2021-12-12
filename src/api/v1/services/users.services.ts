@@ -55,7 +55,10 @@ const userLogInService = async (data: {
   }
 };
 
-const getUsersService = async (userRole: string, OMC: mongoose.ObjectId) => {
+const getUsersService = async (
+  userRole: string,
+  OMC: mongoose.Types.ObjectId
+) => {
   try {
     return await getUsersRespository(userRole, OMC);
   } catch (err) {
@@ -75,7 +78,7 @@ const getUsersByTimeStampsService = async () => {
   }
 };
 
-const userLoginByTokenAuthService = async (id: mongoose.ObjectId) => {
+const userLoginByTokenAuthService = async (id: mongoose.Types.ObjectId) => {
   try {
     return await userLoginByTokenAuthRespository(id);
   } catch (err: any) {
@@ -92,7 +95,10 @@ const userLoginByTokenAuthService = async (id: mongoose.ObjectId) => {
   }
 };
 
-const updateUserService = async (_id: mongoose.ObjectId, data: Object) => {
+const updateUserService = async (
+  _id: mongoose.Types.ObjectId,
+  data: Object
+) => {
   try {
     return await updateUserRespository(_id, data);
   } catch (err: any) {
@@ -109,7 +115,7 @@ const updateUserService = async (_id: mongoose.ObjectId, data: Object) => {
   }
 };
 
-const deleteUserService = async (_id: mongoose.ObjectId) => {
+const deleteUserService = async (_id: mongoose.Types.ObjectId) => {
   try {
     return await deleteUserRespository(_id);
   } catch (err: any) {

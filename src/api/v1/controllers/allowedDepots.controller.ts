@@ -35,7 +35,7 @@ const createAllowedDepot: RequestHandler = async (req, res, next) => {
 const getAllowedDepots: RequestHandler = async (req, res, next) => {
   try {
     const { id, userRole, OMC } = req.body;
-    const allowedDepots = await getAllowedDepotsService(id, userRole, OMC);
+    const allowedDepots = await getAllowedDepotsService(userRole, OMC);
     return res.status(200).json({
       message: "Allowed Depots Returned",
       allowedDepots,
@@ -60,7 +60,7 @@ const getAllowedDepots: RequestHandler = async (req, res, next) => {
 const updateAllowedDepot: RequestHandler = async (req, res, next) => {
   try {
     const data = req.body;
-    const _id = new mongoose.Schema.Types.ObjectId(req.params._id);
+    const _id = new mongoose.Types.ObjectId(req.params._id);
     const allowedDepot = await updateAllowedDepotService(_id, data);
 
     return res.status(200).json({
@@ -87,7 +87,7 @@ const updateAllowedDepot: RequestHandler = async (req, res, next) => {
 
 const deleteAllowedDepot: RequestHandler = async (req, res, next) => {
   try {
-    const _id = new mongoose.Schema.Types.ObjectId(req.params._id);
+    const _id = new mongoose.Types.ObjectId(req.params._id);
     const allowedDepot = await deleteAllowedDepotService(_id);
     return res.status(200).json({
       message: "Allowed Depot Deleted",

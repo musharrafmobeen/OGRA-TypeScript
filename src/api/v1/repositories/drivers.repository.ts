@@ -47,7 +47,7 @@ const addDriverRepository = async (data: any) => {
       err = JSON.parse(err.message);
     } catch (err) {
       throw new Error(
-        '{"status":"Failed", "statusCode":500, "errorMessage":"Error occurred while Creating New Allowed Depot."}'
+        '{"status":"Failed", "statusCode":500, "errorMessage":"Error occurred while Creating New driver."}'
       );
     }
     throw new Error(
@@ -57,7 +57,7 @@ const addDriverRepository = async (data: any) => {
 };
 
 const getDriversRepository = async (
-  OMC: mongoose.ObjectId,
+  OMC: mongoose.Types.ObjectId,
   userRole: string
 ) => {
   try {
@@ -81,7 +81,7 @@ const getDriversRepository = async (
       err = JSON.parse(err.message);
     } catch (err) {
       throw new Error(
-        '{"status":"Failed", "statusCode":500, "errorMessage":"Error occurred while Creating New Allowed Depot."}'
+        '{"status":"Failed", "statusCode":500, "errorMessage":"Error occurred while getting drivers."}'
       );
     }
     throw new Error(
@@ -90,7 +90,10 @@ const getDriversRepository = async (
   }
 };
 
-const updateDriverRepository = async (_id: mongoose.ObjectId, data: any) => {
+const updateDriverRepository = async (
+  _id: mongoose.Types.ObjectId,
+  data: any
+) => {
   try {
     if (data.currentlyAssignedJob === "") {
       data.currentlyAssignedJob = null;
@@ -113,7 +116,7 @@ const updateDriverRepository = async (_id: mongoose.ObjectId, data: any) => {
       err = JSON.parse(err.message);
     } catch (err) {
       throw new Error(
-        '{"status":"Failed", "statusCode":500, "errorMessage":"Error occurred while Creating New Allowed Depot."}'
+        '{"status":"Failed", "statusCode":500, "errorMessage":"Error occurred while updating driver."}'
       );
     }
     throw new Error(
@@ -122,7 +125,7 @@ const updateDriverRepository = async (_id: mongoose.ObjectId, data: any) => {
   }
 };
 
-const deleteDriverRepository = async (_id: mongoose.ObjectId) => {
+const deleteDriverRepository = async (_id: mongoose.Types.ObjectId) => {
   try {
     const driver = await driversModel
       .findOneAndUpdate({ _id }, { $set: { isDeleted: true } })
@@ -140,7 +143,7 @@ const deleteDriverRepository = async (_id: mongoose.ObjectId) => {
       err = JSON.parse(err.message);
     } catch (err) {
       throw new Error(
-        '{"status":"Failed", "statusCode":500, "errorMessage":"Error occurred while Creating New Allowed Depot."}'
+        '{"status":"Failed", "statusCode":500, "errorMessage":"Error occurred while deleting driver."}'
       );
     }
     throw new Error(

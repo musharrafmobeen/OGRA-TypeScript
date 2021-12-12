@@ -1,5 +1,5 @@
 import vehiclesModel from "../models/vehicles.model";
-import OMCVehicleHistoryModel from "../models/omcVehicleHistory.model.js";
+import OMCVehicleHistoryModel from "../models/omcVehicleHistory.model";
 import mongoose from "mongoose";
 
 const addVehicleRepository = async (data: any) => {
@@ -51,7 +51,7 @@ const addVehicleRepository = async (data: any) => {
       err = JSON.parse(err.message);
     } catch (err) {
       throw new Error(
-        '{"status":"Failed", "statusCode":500, "errorMessage":"Error occurred while Registering a User."}'
+        '{"status":"Failed", "statusCode":500, "errorMessage":"Error occurred while Registering a vehicle."}'
       );
     }
     throw new Error(
@@ -61,7 +61,7 @@ const addVehicleRepository = async (data: any) => {
 };
 
 const getVehiclesRepository = async (
-  OMC: mongoose.ObjectId,
+  OMC: mongoose.Types.ObjectId,
   userRole: string
 ) => {
   try {
@@ -82,7 +82,7 @@ const getVehiclesRepository = async (
     }
   } catch (error) {
     throw new Error(
-      '{"status":"Failed", "statusCode":500, "errorMessage":"Error occurred while Registering a User."}'
+      '{"status":"Failed", "statusCode":500, "errorMessage":"Error occurred while getting vehicles."}'
     );
   }
 };
@@ -97,7 +97,7 @@ const getWorkingVehiclesRepository = async () => {
     return vehicles;
   } catch (error) {
     throw new Error(
-      '{"status":"Failed", "statusCode":500, "errorMessage":"Error occurred while Registering a User."}'
+      '{"status":"Failed", "statusCode":500, "errorMessage":"Error occurred while getting working vehicles."}'
     );
   }
 };
@@ -112,12 +112,15 @@ const getDeletedVehiclesRepository = async () => {
     return vehicles;
   } catch (error) {
     throw new Error(
-      '{"status":"Failed", "statusCode":500, "errorMessage":"Error occurred while Registering a User."}'
+      '{"status":"Failed", "statusCode":500, "errorMessage":"Error occurred while getting deleted vehicles."}'
     );
   }
 };
 
-const updateVehicleRepository = async (_id: mongoose.ObjectId, data: any) => {
+const updateVehicleRepository = async (
+  _id: mongoose.Types.ObjectId,
+  data: any
+) => {
   try {
     if (data.associatedDrivers === "") {
       data.associatedDrivers = null;
@@ -140,7 +143,7 @@ const updateVehicleRepository = async (_id: mongoose.ObjectId, data: any) => {
       err = JSON.parse(err.message);
     } catch (err) {
       throw new Error(
-        '{"status":"Failed", "statusCode":500, "errorMessage":"Error occurred while Registering a User."}'
+        '{"status":"Failed", "statusCode":500, "errorMessage":"Error occurred while updating vehicle."}'
       );
     }
     throw new Error(
@@ -150,7 +153,7 @@ const updateVehicleRepository = async (_id: mongoose.ObjectId, data: any) => {
 };
 
 const updateVehicleOMCHistoryRepository = async (
-  _id: mongoose.ObjectId,
+  _id: mongoose.Types.ObjectId,
   data: any
 ) => {
   try {
@@ -180,7 +183,7 @@ const updateVehicleOMCHistoryRepository = async (
       err = JSON.parse(err.message);
     } catch (err) {
       throw new Error(
-        '{"status":"Failed", "statusCode":500, "errorMessage":"Error occurred while Registering a User."}'
+        '{"status":"Failed", "statusCode":500, "errorMessage":"Error occurred while updating vehicle OMC history."}'
       );
     }
     throw new Error(
@@ -189,7 +192,7 @@ const updateVehicleOMCHistoryRepository = async (
   }
 };
 
-const deleteVehicleRepository = async (_id: mongoose.ObjectId) => {
+const deleteVehicleRepository = async (_id: mongoose.Types.ObjectId) => {
   try {
     const vehicle = await vehiclesModel
       .findOneAndUpdate({ _id }, { $set: { isDeleted: true } })
@@ -207,7 +210,7 @@ const deleteVehicleRepository = async (_id: mongoose.ObjectId) => {
       err = JSON.parse(err.message);
     } catch (err) {
       throw new Error(
-        '{"status":"Failed", "statusCode":500, "errorMessage":"Error occurred while Registering a User."}'
+        '{"status":"Failed", "statusCode":500, "errorMessage":"Error occurred while deleting vehicle."}'
       );
     }
     throw new Error(

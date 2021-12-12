@@ -34,7 +34,7 @@ const addDepotRepository = async (data: any) => {
       err = JSON.parse(err.message);
     } catch (err) {
       throw new Error(
-        '{"status":"Failed", "statusCode":500, "errorMessage":"Error occurred while Creating New Allowed Depot."}'
+        '{"status":"Failed", "statusCode":500, "errorMessage":"Error occurred while Creating New depot."}'
       );
     }
     throw new Error(
@@ -44,7 +44,7 @@ const addDepotRepository = async (data: any) => {
 };
 
 const getDepotsRepository = async (
-  OMC: mongoose.ObjectId,
+  OMC: mongoose.Types.ObjectId,
   userRole: string
 ) => {
   try {
@@ -65,12 +65,15 @@ const getDepotsRepository = async (
     }
   } catch (error) {
     throw new Error(
-      '{"status":"Failed", "statusCode":500, "errorMessage":"Error occurred while Creating New Allowed Depot."}'
+      '{"status":"Failed", "statusCode":500, "errorMessage":"Error occurred while getting depots."}'
     );
   }
 };
 
-const updateDepotRepository = async (_id: mongoose.ObjectId, data: any) => {
+const updateDepotRepository = async (
+  _id: mongoose.Types.ObjectId,
+  data: any
+) => {
   try {
     if (data.depotIncharge === "") {
       data.depotIncharge = null;
@@ -93,7 +96,7 @@ const updateDepotRepository = async (_id: mongoose.ObjectId, data: any) => {
       err = JSON.parse(err.message);
     } catch (err) {
       throw new Error(
-        '{"status":"Failed", "statusCode":500, "errorMessage":"Error occurred while Creating New Allowed Depot."}'
+        '{"status":"Failed", "statusCode":500, "errorMessage":"Error occurred while updating depot."}'
       );
     }
     throw new Error(
@@ -102,7 +105,7 @@ const updateDepotRepository = async (_id: mongoose.ObjectId, data: any) => {
   }
 };
 
-const deleteDepotRepository = async (_id: mongoose.ObjectId) => {
+const deleteDepotRepository = async (_id: mongoose.Types.ObjectId) => {
   try {
     const depot = await depotModel
       .findOneAndUpdate({ _id }, { $set: { isDeleted: true } })
@@ -112,7 +115,7 @@ const deleteDepotRepository = async (_id: mongoose.ObjectId) => {
       return depot;
     } else {
       throw new Error(
-        '{"status":"Failed", "statusCode":500, "errorMessage":"Error occurred while Creating New Allowed Depot."}'
+        '{"status":"User Not Found", "statusCode":404, "errorMessage":"No Depot found with the given credentials."}'
       );
     }
   } catch (err: any) {
@@ -120,7 +123,7 @@ const deleteDepotRepository = async (_id: mongoose.ObjectId) => {
       err = JSON.parse(err.message);
     } catch (err) {
       throw new Error(
-        '{"status":"Failed", "statusCode":500, "errorMessage":"Error occurred while Creating New Allowed Depot."}'
+        '{"status":"Failed", "statusCode":500, "errorMessage":"Error occurred while deleting depot."}'
       );
     }
     throw new Error(

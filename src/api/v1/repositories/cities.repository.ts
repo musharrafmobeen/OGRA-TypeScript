@@ -27,7 +27,7 @@ const createCityRepository = async (data: any) => {
       err = JSON.parse(err.message);
     } catch (err) {
       throw new Error(
-        '{"status":"Failed", "statusCode":500, "errorMessage":"Error occurred while Creating New Allowed Depot."}'
+        '{"status":"Failed", "statusCode":500, "errorMessage":"Error occurred while Creating A New City."}'
       );
     }
     throw new Error(
@@ -43,12 +43,15 @@ const getCitiesRepository = async () => {
     return cities;
   } catch (error) {
     throw new Error(
-      '{"status":"Failed", "statusCode":500, "errorMessage":"Error occurred while Creating New Allowed Depot."}'
+      '{"status":"Failed", "statusCode":500, "errorMessage":"Error occurred while getting All Cities."}'
     );
   }
 };
 
-const updateCityRepository = async (_id: mongoose.ObjectId, data: any) => {
+const updateCityRepository = async (
+  _id: mongoose.Types.ObjectId,
+  data: any
+) => {
   try {
     const city = await cityModel
       .findOneAndUpdate({ _id }, { $set: { ...data } })
@@ -65,7 +68,7 @@ const updateCityRepository = async (_id: mongoose.ObjectId, data: any) => {
       err = JSON.parse(err.message);
     } catch (err) {
       throw new Error(
-        '{"status":"Failed", "statusCode":500, "errorMessage":"Error occurred while Creating New Allowed Depot."}'
+        '{"status":"Failed", "statusCode":500, "errorMessage":"Error occurred while updating city."}'
       );
     }
     throw new Error(
@@ -74,7 +77,7 @@ const updateCityRepository = async (_id: mongoose.ObjectId, data: any) => {
   }
 };
 
-const deleteCityRepository = async (_id: mongoose.ObjectId) => {
+const deleteCityRepository = async (_id: mongoose.Types.ObjectId) => {
   try {
     const city = await cityModel
       .findOneAndDelete({ _id })
@@ -92,7 +95,7 @@ const deleteCityRepository = async (_id: mongoose.ObjectId) => {
       err = JSON.parse(err.message);
     } catch (err) {
       throw new Error(
-        '{"status":"Failed", "statusCode":500, "errorMessage":"Error occurred while Creating New Allowed Depot."}'
+        '{"status":"Failed", "statusCode":500, "errorMessage":"Error occurred while deleting city."}'
       );
     }
     throw new Error(

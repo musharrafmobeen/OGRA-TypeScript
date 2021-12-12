@@ -60,7 +60,7 @@ const createOMCRespository = async (data: any) => {
       err = JSON.parse(err.message);
     } catch (err) {
       throw new Error(
-        '{"status":"Failed", "statusCode":500, "errorMessage":"Error occurred while Creating New Allowed Depot."}'
+        '{"status":"Failed", "statusCode":500, "errorMessage":"Error occurred while Creating New OMC."}'
       );
     }
     throw new Error(
@@ -76,24 +76,27 @@ const getOMCsRespository = async () => {
     return OMCs;
   } catch (error) {
     throw new Error(
-      '{"status":"Failed", "statusCode":500, "errorMessage":"Error occurred while Creating New Allowed Depot."}'
+      '{"status":"Failed", "statusCode":500, "errorMessage":"Error occurred while getting omcs."}'
     );
   }
 };
 
-const getAvailableDepotsRespository = async (OMC: mongoose.ObjectId) => {
+const getAvailableDepotsRespository = async (OMC: mongoose.Types.ObjectId) => {
   try {
     const depots = await allowedDepotModel.find({ OMC }).populate("OMC").exec();
 
     return depots;
   } catch (error) {
     throw new Error(
-      '{"status":"Failed", "statusCode":500, "errorMessage":"Error occurred while Creating New Allowed Depot."}'
+      '{"status":"Failed", "statusCode":500, "errorMessage":"Error occurred while getting available omcs."}'
     );
   }
 };
 
-const updateOMCRespository = async (_id: mongoose.ObjectId, data: any) => {
+const updateOMCRespository = async (
+  _id: mongoose.Types.ObjectId,
+  data: any
+) => {
   try {
     const OMC = await OMCsModel.findOneAndUpdate(
       { _id },
@@ -111,7 +114,7 @@ const updateOMCRespository = async (_id: mongoose.ObjectId, data: any) => {
       err = JSON.parse(err.message);
     } catch (err) {
       throw new Error(
-        '{"status":"Failed", "statusCode":500, "errorMessage":"Error occurred while Creating New Allowed Depot."}'
+        '{"status":"Failed", "statusCode":500, "errorMessage":"Error occurred while updating omc."}'
       );
     }
     throw new Error(
@@ -120,7 +123,7 @@ const updateOMCRespository = async (_id: mongoose.ObjectId, data: any) => {
   }
 };
 
-const deleteOMCRespository = async (_id: mongoose.ObjectId) => {
+const deleteOMCRespository = async (_id: mongoose.Types.ObjectId) => {
   try {
     const OMC = await OMCsModel.findOneAndDelete({ _id }).exec();
     if (OMC) {
@@ -135,7 +138,7 @@ const deleteOMCRespository = async (_id: mongoose.ObjectId) => {
       err = JSON.parse(err.message);
     } catch (err) {
       throw new Error(
-        '{"status":"Failed", "statusCode":500, "errorMessage":"Error occurred while Creating New Allowed Depot."}'
+        '{"status":"Failed", "statusCode":500, "errorMessage":"Error occurred while deleting omc."}'
       );
     }
     throw new Error(

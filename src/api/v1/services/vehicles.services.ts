@@ -26,7 +26,10 @@ const addVehicleService = async (data: any) => {
   }
 };
 
-const getVehiclesService = async (OMC: mongoose.ObjectId, userRole: string) => {
+const getVehiclesService = async (
+  OMC: mongoose.Types.ObjectId,
+  userRole: string
+) => {
   try {
     return await getVehiclesRepository(OMC, userRole);
   } catch (error) {
@@ -56,7 +59,10 @@ const getDeletedVehiclesService = async () => {
   }
 };
 
-const updateVehicleService = async (_id: mongoose.ObjectId, data: any) => {
+const updateVehicleService = async (
+  _id: mongoose.Types.ObjectId,
+  data: any
+) => {
   try {
     return await updateVehicleRepository(_id, data);
   } catch (err: any) {
@@ -74,7 +80,7 @@ const updateVehicleService = async (_id: mongoose.ObjectId, data: any) => {
 };
 
 const updateVehicleOMCHistoryService = async (
-  _id: mongoose.ObjectId,
+  _id: mongoose.Types.ObjectId,
   data: any
 ) => {
   try {
@@ -93,7 +99,7 @@ const updateVehicleOMCHistoryService = async (
   }
 };
 
-const deleteVehicleService = async (_id: mongoose.ObjectId) => {
+const deleteVehicleService = async (_id: mongoose.Types.ObjectId) => {
   try {
     return await deleteVehicleRepository(_id);
   } catch (err: any) {

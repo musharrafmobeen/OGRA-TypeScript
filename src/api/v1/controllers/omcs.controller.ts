@@ -86,7 +86,7 @@ const getAvailableDepots: RequestHandler = async (req, res, next) => {
 const updateOMC: RequestHandler = async (req, res, next) => {
   try {
     const data = req.body;
-    const _id = new mongoose.Schema.Types.ObjectId(req.params._id);
+    const _id = new mongoose.Types.ObjectId(req.params._id);
     const OMC = await updateOMCService(_id, data);
     return res.status(200).json({
       message: "OMC Updated",
@@ -112,7 +112,7 @@ const updateOMC: RequestHandler = async (req, res, next) => {
 
 const deleteOMC: RequestHandler = async (req, res, next) => {
   try {
-    const _id = new mongoose.Schema.Types.ObjectId(req.params._id);
+    const _id = new mongoose.Types.ObjectId(req.params._id);
     const OMC = deleteOMCService(_id);
     return res.status(200).json({
       message: "OMC Deleted",

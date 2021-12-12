@@ -33,7 +33,10 @@ const getIfemLocationService = async () => {
   }
 };
 
-const updateIfemLocationService = async (_id: mongoose.ObjectId, data: any) => {
+const updateIfemLocationService = async (
+  _id: mongoose.Types.ObjectId,
+  data: any
+) => {
   try {
     return updateIfemLocationRepository(_id, data);
   } catch (err: any) {
@@ -50,7 +53,7 @@ const updateIfemLocationService = async (_id: mongoose.ObjectId, data: any) => {
   }
 };
 
-const deleteIfemLocationService = async (_id: mongoose.ObjectId) => {
+const deleteIfemLocationService = async (_id: mongoose.Types.ObjectId) => {
   try {
     return deleteIfemLocationRepository(_id);
   } catch (err: any) {

@@ -46,9 +46,8 @@ const createAllowedDepotRepository = async (data: any) => {
 };
 
 const getAllowedDepotsRepository = async (
-  id: mongoose.ObjectId,
   userRole: string,
-  OMC: mongoose.ObjectId
+  OMC: mongoose.Types.ObjectId
 ) => {
   try {
     if (userRole === "OGRA Technical Team") {
@@ -71,7 +70,7 @@ const getAllowedDepotsRepository = async (
       err = JSON.parse(err.message);
     } catch (err) {
       throw new Error(
-        '{"status":"Failed", "statusCode":500, "errorMessage":"Error occurred while Creating New Allowed Depot."}'
+        '{"status":"Failed", "statusCode":500, "errorMessage":"Error occurred while getting Allowed Depots."}'
       );
     }
     throw new Error(
@@ -81,7 +80,7 @@ const getAllowedDepotsRepository = async (
 };
 
 const updateAllowedDepotRepository = async (
-  _id: mongoose.ObjectId,
+  _id: mongoose.Types.ObjectId,
   data: any
 ) => {
   try {
@@ -104,7 +103,7 @@ const updateAllowedDepotRepository = async (
       err = JSON.parse(err.message);
     } catch (err) {
       throw new Error(
-        '{"status":"Failed", "statusCode":500, "errorMessage":"Error occurred while Creating New Allowed Depot."}'
+        '{"status":"Failed", "statusCode":500, "errorMessage":"Error occurred while updating Allowed Depot."}'
       );
     }
     throw new Error(
@@ -113,7 +112,7 @@ const updateAllowedDepotRepository = async (
   }
 };
 
-const deleteAllowedDepotRepository = async (_id: mongoose.ObjectId) => {
+const deleteAllowedDepotRepository = async (_id: mongoose.Types.ObjectId) => {
   try {
     const allowedDepot = await allowedDepotModel
       .findOneAndDelete({ _id })
@@ -131,7 +130,7 @@ const deleteAllowedDepotRepository = async (_id: mongoose.ObjectId) => {
       err = JSON.parse(err.message);
     } catch (err) {
       throw new Error(
-        '{"status":"Failed", "statusCode":500, "errorMessage":"Error occurred while Creating New Allowed Depot."}'
+        '{"status":"Failed", "statusCode":500, "errorMessage":"Error occurred while deleting Allowed Depot."}'
       );
     }
     throw new Error(

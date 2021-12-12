@@ -6,7 +6,7 @@ const getHistoryRepository = async () => {
     return history;
   } catch (error) {
     throw new Error(
-      '{"status":"Failed", "statusCode":500, "errorMessage":"Error occurred while Creating New Allowed Depot."}'
+      '{"status":"Failed", "statusCode":500, "errorMessage":"Error occurred while getting OMC Vehicle History."}'
     );
   }
 };

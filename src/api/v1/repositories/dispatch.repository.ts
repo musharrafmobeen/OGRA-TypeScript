@@ -1,14 +1,12 @@
-import dispatchModel from "../models/dispatch.js";
-import userModel from "../models/userManagement&AccessRights.js";
-import depotModel from "../models/depots.js";
-import omcModel from "../models/OMCs.js";
-import vehiclesModel from "../models/vehicles.js";
-import driversModel from "../models/drivers.js";
+import dispatchModel from "../models/dispatch.model";
+import userModel from "../models/users.model";
+import depotModel from "../models/depots.model";
+import omcModel from "../models/omcs.model";
+import vehiclesModel from "../models/vehicles.model";
+import driversModel from "../models/drivers.model";
 import mongoose from "mongoose";
-import NodeCache from "node-cache";
-const cache = new NodeCache();
 
-const driversUpdate = async (Drivers, _id) => {
+const driversUpdate = async (Drivers: any, _id: mongoose.Types.ObjectId) => {
   let data = [];
 
   for (let i = 0; i < Drivers.length; i++) {
@@ -23,24 +21,11 @@ const driversUpdate = async (Drivers, _id) => {
   }
 
   return data;
-  // const drivers = Drivers.map(async (driver) => {
-  //   const data = await driversModel
-  //     .findOneAndUpdate(
-  //       { _id: driver },
-  //       { $set: { currentlyAssignedJob: _id } }
-  //     )
-  //     .exec();
-
-  //   console.log(data);
-  //   return data;
-  // });
-  // return drivers;
 };
 
-const addDispatch = async (req, res, next) => {
+const addDispatchRespository = async (data: any) => {
   try {
-    let { id, vehicle, Drivers, destinationDepot } = req.body;
-    const { OMC } = await userModel.findOne({ _id: id }).exec();
+    let { OMC, id, vehicle, Drivers, destinationDepot } = data;
     const OMC_OBJ = await omcModel.findById(OMC).exec();
     if (OMC_OBJ.permissions.pr03Dashboard.createPR03) {
       const dispatch = await dispatchModel
@@ -96,87 +81,40 @@ const addDispatch = async (req, res, next) => {
 
         await newDispatch.save();
 
-        cache.set("updated", true);
-
-        cache.set("personalupdated", true);
-
-        cache.set("recupdated", true);
-
-        cache.set("omcUpdated", true);
-
-        return res.status(201).json({
-          message: "Dispatch Added",
-          dispatch: await dispatchModel.findOne({ _id }).exec(),
-          request: {
-            type: "POST",
-            description: "Dispatch Added",
-            URL: process.env.URL + "dispatches",
-          },
-        });
+        return await dispatchModel.findOne({ _id }).exec();
       }
-      return res.status(403).json({
-        error: {
-          status: "Dispatch Present",
-          statusCode: 403,
-        },
-        message: "Dispatch Has Already Been Added.",
-      });
+      throw new Error(
+        '{"status":"Already Exists", "statusCode":403, "errorMessage":"Dispatch Already Exists"}'
+      );
     } else {
-      return res.status(401).json({
-        error: {
-          status: "Not Authorized",
-          statusCode: 401,
-        },
-        message: "OMC Does Not Have Permission to Create Dispatches.",
-      });
+      throw new Error(
+        '{"status":"Not Authorized", "statusCode":401, "errorMessage":"OMC Does Not Have Permission to Create Dispatches."}'
+      );
     }
-  } catch (error) {
-    return res.status(500).json({
-      error: {
-        status: "Failed",
-        statusCode: 500,
-        errorMessage: error,
-      },
-      message: "Error occured while Adding A Dispatch.",
-    });
+  } catch (err: any) {
+    try {
+      err = JSON.parse(err.message);
+    } catch (err) {
+      throw new Error(
+        '{"status":"Failed", "statusCode":500, "errorMessage":"Error occurred while Creating New Dispatche."}'
+      );
+    }
+    throw new Error(
+      `{"status":"${err.status}", "statusCode":${err.statusCode}, "errorMessage":"${err.errorMessage}"}`
+    );
   }
 };
 
-const getDispatches = async (req, res, next) => {
+const getDispatchesRespository = async (
+  id: mongoose.Types.ObjectId,
+  userRole: string
+) => {
   try {
-    const { userRole, id } = req.body;
     if (userRole === "OGRA Technical Team") {
-      const updated = cache.get("updated");
-      // if (updated === true || updated == undefined) {
       const dispatches = await dispatchModel.find().exec();
 
-      cache.set("Tech", dispatches);
-      cache.set("updated", false);
-
-      return res.status(200).json({
-        message: "Dispatch Returned",
-        dispatches: dispatches,
-        request: {
-          type: "GET",
-          description: "Dispatch Returned",
-          URL: process.env.URL + "dispatches",
-        },
-      });
-      // } else {
-      //   const data = cache.get("Tech");
-
-      //   return res.status(200).json({
-      //     message: "Dispatch Returned",
-      //     dispatches: data,
-      //     request: {
-      //       type: "GET",
-      //       description: "Dispatch Returned",
-      //       URL: process.env.URL + "dispatches",
-      //     },
-      //   });
-      // }
+      return dispatches;
     } else {
-      const updated = cache.get("omcUpdated");
       const { OMC } = await userModel
         .findOne({ _id: id })
         .populate("OMC")
@@ -186,189 +124,120 @@ const getDispatches = async (req, res, next) => {
         const dispatches = await dispatchModel
           .find({ "OMC._id": OMC._id })
           .exec();
-        cache.set(OMC.OMCName, dispatches);
-        cache.set("omcUpdated", false);
-        return res.status(200).json({
-          message: "Dispatch Returned",
-          dispatches,
-          request: {
-            type: "GET",
-            description: "Dispatch Returned",
-            URL: process.env.URL + "dispatches",
-          },
-        });
-        // } else {
-        //   const data = cache.get(OMC.OMCName);
-        //   return res.status(200).json({
-        //     message: "Dispatch Returned",
-        //     dispatches: data,
-        //     request: {
-        //       type: "GET",
-        //       description: "Dispatch Returned",
-        //       URL: process.env.URL + "dispatches",
-        //     },
-        //   });
-        // }
+        return dispatches;
       } else {
-        return res.status(401).json({
-          error: {
-            status: "Not Authorized",
-            statusCode: 401,
-          },
-          message: "OMC Does Not Have Permission to Get Dispatches.",
-        });
+        throw new Error(
+          '{"status":"Not Authorized", "statusCode":401, "errorMessage":"OMC Does Not Have Permission to get Dispatches."}'
+        );
       }
     }
-  } catch (error) {
-    return res.status(500).json({
-      error: {
-        status: "Failed",
-        statusCode: 500,
-        errorMessage: error,
-      },
-      message: "Error occured while Trying To Get All Dispatch",
-    });
+  } catch (err: any) {
+    try {
+      err = JSON.parse(err.message);
+    } catch (err) {
+      throw new Error(
+        '{"status":"Failed", "statusCode":500, "errorMessage":"Error occurred while Get dispatches."}'
+      );
+    }
+    throw new Error(
+      `{"status":"${err.status}", "statusCode":${err.statusCode}, "errorMessage":"${err.errorMessage}"}`
+    );
   }
 };
 
-const getPersonalDispatches = async (req, res, next) => {
+const getPersonalDispatchesRespository = async (
+  id: mongoose.Types.ObjectId
+) => {
   try {
-    const { id } = req.body;
-    const updated = cache.get("personalupdated");
     const { primaryDepot, OMC } = await userModel
       .findOne({ _id: id })
       .populate("OMC")
       .exec();
     if (OMC.permissions.pr03Dashboard.viewPR03) {
-      // if (updated === true || updated === undefined) {
       const dispatches = await dispatchModel
         .find({ "sourceDepot._id": primaryDepot })
         .exec();
-      cache.set(`PersonalDispatches${primaryDepot}`, dispatches);
-      cache.set("updated", false);
-      return res.status(200).json({
-        message: "Dispatch Returned",
-        dispatches,
-        request: {
-          type: "GET",
-          description: "Dispatch Returned",
-          URL: process.env.URL + "dispatches",
-        },
-      });
-      // } else {
-      //   const data = cache.get(`PersonalDispatches${primaryDepot}`);
-      //   return res.status(200).json({
-      //     message: "Dispatch Returned",
-      //     dispatches: data,
-      //     request: {
-      //       type: "GET",
-      //       description: "Dispatch Returned",
-      //       URL: process.env.URL + "dispatches",
-      //     },
-      //   });
-      // }
+      return dispatches;
     } else {
-      return res.status(401).json({
-        error: {
-          status: "Not Authorized",
-          statusCode: 401,
-        },
-        message: "OMC Does Not Have Permission to Get Dispatches.",
-      });
+      throw new Error(
+        '{"status":"Not Authorized", "statusCode":401, "errorMessage":"OMC Does Not Have Permission to Get Dispatches."}'
+      );
     }
-  } catch (error) {
-    return res.status(500).json({
-      error: {
-        status: "Failed",
-        statusCode: 500,
-        errorMessage: error,
-      },
-      message: "Error occured while Trying To Get All Dispatch",
-    });
+  } catch (err: any) {
+    try {
+      err = JSON.parse(err.message);
+    } catch (err) {
+      throw new Error(
+        '{"status":"Failed", "statusCode":500, "errorMessage":"Error occurred while getting personal dispacthes."}'
+      );
+    }
+    throw new Error(
+      `{"status":"${err.status}", "statusCode":${err.statusCode}, "errorMessage":"${err.errorMessage}"}`
+    );
   }
 };
 
-const getReceivingDispatches = async (req, res, next) => {
+const getReceivingDispatchesRespository = async (
+  id: mongoose.Types.ObjectId
+) => {
   try {
-    const { id } = req.body;
-    const updated = cache.get("recupdated");
     const { deployedDepot, OMC } = await userModel
       .findOne({ _id: id })
       .populate("OMC")
       .exec();
     if (OMC.permissions.pr03Dashboard.viewPR03) {
-      // if (updated === true || updated === undefined) {
       const dispatches = await dispatchModel
         .find({ "destinationDepot._id": deployedDepot })
         .exec();
-      cache.set("ReceivingDispatches", dispatches);
-      cache.set("updated", false);
-      return res.status(200).json({
-        message: "Dispatch Returned",
-        dispatches,
-        request: {
-          type: "GET",
-          description: "Dispatch Returned",
-          URL: process.env.URL + "dispatches",
-        },
-      });
-      // } else {
-      //   const data = cache.get("ReceivingDispatches");
-      //   return res.status(200).json({
-      //     message: "Dispatch Returned",
-      //     dispatches: data,
-      //     request: {
-      //       type: "GET",
-      //       description: "Dispatch Returned",
-      //       URL: process.env.URL + "dispatches",
-      //     },
-      //   });
-      // }
+
+      return dispatches;
     } else {
-      return res.status(401).json({
-        error: {
-          status: "Not Authorized",
-          statusCode: 401,
-        },
-        message: "OMC Does Not Have Permission to Get Dispatches.",
-      });
+      throw new Error(
+        '{"status":"Not Authorized", "statusCode":401, "errorMessage":"OMC Does Not Have Permission to Get Dispatches."}'
+      );
     }
-  } catch (error) {
-    return res.status(500).json({
-      error: {
-        status: "Failed",
-        statusCode: 500,
-        errorMessage: error,
-      },
-      message: "Error occured while Trying To Get All Dispatch",
-    });
+  } catch (err: any) {
+    try {
+      err = JSON.parse(err.message);
+    } catch (err) {
+      throw new Error(
+        '{"status":"Failed", "statusCode":500, "errorMessage":"Error occurred while getting receiving dispatches."}'
+      );
+    }
+    throw new Error(
+      `{"status":"${err.status}", "statusCode":${err.statusCode}, "errorMessage":"${err.errorMessage}"}`
+    );
   }
 };
 
-const updateDispatch = async (req, res, next) => {
+const updateDispatchRespository = async (
+  _id: mongoose.Types.ObjectId,
+  data: any
+) => {
   try {
-    const { id } = req.body;
-    const { OMC } = await userModel.findOne({ _id: id }).populate("OMC").exec();
+    const { OMC } = await userModel
+      .findOne({ _id: data.id })
+      .populate("OMC")
+      .exec();
     if (OMC.permissions.pr03Dashboard.updatePR03) {
-      const { _id } = req.params;
-      const recieveDataEntryUserId = req.body.id;
+      const recieveDataEntryUserId = data.id;
       let updateData = [];
-      if (req.body.hasOwnProperty("userStatus")) {
+      if (data.hasOwnProperty("userStatus")) {
         updateData = [
           { _id },
-          { $set: { ...req.body } },
+          { $set: { ...data } },
           {
             $push: {
               statusByInspector: {
                 userID: recieveDataEntryUserId,
-                userStatus: req.body.userStatus,
-                comment: req.body.comment,
+                userStatus: data.userStatus,
+                comment: data.comment,
               },
             },
           },
         ];
       } else {
-        updateData = [{ _id }, { $set: { ...req.body } }];
+        updateData = [{ _id }, { $set: { ...data } }];
       }
 
       const dispatch = await dispatchModel
@@ -376,102 +245,73 @@ const updateDispatch = async (req, res, next) => {
         .exec();
 
       if (dispatch) {
-        cache.set("updated", true);
-        return res.status(200).json({
-          message: "Dispatch Updated",
-          dispatch: await dispatchModel.findOne({ _id }).exec(),
-          request: {
-            type: "PATCH",
-            description: "Dispatch Updated",
-            URL: process.env.URL + "dispatches",
-          },
-        });
+        return await dispatchModel.findOne({ _id }).exec();
       } else {
-        return res.status(404).json({
-          error: {
-            status: "Not Found",
-            statusCode: 404,
-          },
-          message: "No Dispatch With Given Id Was Found.",
-        });
+        throw new Error(
+          '{"status":"User Not Found", "statusCode":404, "errorMessage":"No Dispatch found with the given credentials."}'
+        );
       }
     } else {
-      return res.status(401).json({
-        error: {
-          status: "Not Authorized",
-          statusCode: 401,
-        },
-        message: "OMC Does Not Have Permission to Update Dispatches.",
-      });
+      throw new Error(
+        '{"status":"Not Authorized", "statusCode":401, "errorMessage":"OMC Does Not Have Permission to Update Dispatches."}'
+      );
     }
-  } catch (error) {
-    return res.status(500).json({
-      error: {
-        status: "Failed",
-        statusCode: 500,
-        errorMessage: error,
-      },
-      message: "Error occured while Updating Dispatch.",
-    });
+  } catch (err: any) {
+    try {
+      err = JSON.parse(err.message);
+    } catch (err) {
+      throw new Error(
+        '{"status":"Failed", "statusCode":500, "errorMessage":"Error occurred while updating dispatch."}'
+      );
+    }
+    throw new Error(
+      `{"status":"${err.status}", "statusCode":${err.statusCode}, "errorMessage":"${err.errorMessage}"}`
+    );
   }
 };
 
-const deleteDispatch = async (req, res, next) => {
+const deleteDispatchRespository = async (
+  _id: mongoose.Types.ObjectId,
+  id: mongoose.Types.ObjectId
+) => {
   try {
-    const { id } = req.body;
     const { OMC } = await userModel.findOne({ _id: id }).populate("OMC").exec();
     if (OMC.permissions.pr03Dashboard.deletePR03) {
-      const { _id } = req.params;
       const dispatch = await dispatchModel
         .findOneAndDelete({ _id })
         .populate("OMC storagePoint sourceIFEMLocation destinationIFEMLocation")
         .exec();
       if (dispatch) {
-        cache.set("updated", true);
-        return res.status(200).json({
-          message: "Dispatch Deleted",
-          dispatch,
-          request: {
-            type: "DELETE",
-            description: "Dispatch Deleted",
-            URL: process.env.URL + "dispatches",
-          },
-        });
+        return dispatch;
       } else {
-        return res.status(404).json({
-          error: {
-            status: "Not Found",
-            statusCode: 404,
-          },
-          message: "No Dispatch With Given Id Was Found.",
-        });
+        throw new Error(
+          '{"status":"User Not Found", "statusCode":404, "errorMessage":"No Dispatch found with the given credentials."}'
+        );
       }
     } else {
-      return res.status(401).json({
-        error: {
-          status: "Not Authorized",
-          statusCode: 401,
-        },
-        message: "OMC Does Not Have Permission to Update Dispatches.",
-      });
+      throw new Error(
+        '{"status":"Not Authorized", "statusCode":401, "errorMessage":"OMC Does Not Have Permission to Delete Dispatches."}'
+      );
     }
-  } catch (error) {
-    return res.status(500).json({
-      error: {
-        status: "Failed",
-        statusCode: 500,
-        errorMessage: error,
-      },
-      message: "Error occured while Deleting Dispatch.",
-    });
+  } catch (err: any) {
+    try {
+      err = JSON.parse(err.message);
+    } catch (err) {
+      throw new Error(
+        '{"status":"Failed", "statusCode":500, "errorMessage":"Error occurred while deleting dispatch."}'
+      );
+    }
+    throw new Error(
+      `{"status":"${err.status}", "statusCode":${err.statusCode}, "errorMessage":"${err.errorMessage}"}`
+    );
   }
 };
 
 export {
-  addDispatch,
-  getDispatches,
-  updateDispatch,
-  deleteDispatch,
-  getPersonalDispatches,
-  getReceivingDispatches,
+  addDispatchRespository,
+  getDispatchesRespository,
+  updateDispatchRespository,
+  deleteDispatchRespository,
+  getPersonalDispatchesRespository,
+  getReceivingDispatchesRespository,
 };

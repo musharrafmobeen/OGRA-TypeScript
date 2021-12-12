@@ -95,7 +95,7 @@ const userLogInRespository = async (data: {
       err = JSON.parse(err.message);
     } catch (err) {
       throw new Error(
-        '{"status":"Failed", "statusCode":500, "errorMessage":"Error occurred while Registering a User."}'
+        '{"status":"Failed", "statusCode":500, "errorMessage":"Error occurred while Login."}'
       );
     }
     throw new Error(
@@ -106,7 +106,7 @@ const userLogInRespository = async (data: {
 
 const getUsersRespository = async (
   userRole: string,
-  OMC: mongoose.ObjectId
+  OMC: mongoose.Types.ObjectId
 ) => {
   try {
     if (userRole === "OGRA Technical Team") {
@@ -128,7 +128,7 @@ const getUsersRespository = async (
     }
   } catch (err) {
     throw new Error(
-      '{"status":"Failed", "statusCode":500, "errorMessage":"Error occurred while Registering a User."}'
+      '{"status":"Failed", "statusCode":500, "errorMessage":"Error occurred while getting users."}'
     );
   }
 };
@@ -145,12 +145,12 @@ const getUsersByTimeStampsRespository = async () => {
     return users;
   } catch (err) {
     throw new Error(
-      '{"status":"Failed", "statusCode":500, "errorMessage":"Error occurred while Registering a User."}'
+      '{"status":"Failed", "statusCode":500, "errorMessage":"Error occurred while getting users by timestamp."}'
     );
   }
 };
 
-const userLoginByTokenAuthRespository = async (id: mongoose.ObjectId) => {
+const userLoginByTokenAuthRespository = async (id: mongoose.Types.ObjectId) => {
   try {
     let userDoc = await userModel
       .findOne({ _id: id })
@@ -191,7 +191,7 @@ const userLoginByTokenAuthRespository = async (id: mongoose.ObjectId) => {
       err = JSON.parse(err.message);
     } catch (err) {
       throw new Error(
-        '{"status":"Failed", "statusCode":500, "errorMessage":"Error occurred while Registering a User."}'
+        '{"status":"Failed", "statusCode":500, "errorMessage":"Error occurred while login with token."}'
       );
     }
     throw new Error(
@@ -200,7 +200,10 @@ const userLoginByTokenAuthRespository = async (id: mongoose.ObjectId) => {
   }
 };
 
-const updateUserRespository = async (_id: mongoose.ObjectId, data: Object) => {
+const updateUserRespository = async (
+  _id: mongoose.Types.ObjectId,
+  data: Object
+) => {
   try {
     let user = await userModel
       .findOneAndUpdate({ _id }, { $set: { ...data } })
@@ -220,7 +223,7 @@ const updateUserRespository = async (_id: mongoose.ObjectId, data: Object) => {
       err = JSON.parse(err.message);
     } catch (err) {
       throw new Error(
-        '{"status":"Failed", "statusCode":500, "errorMessage":"Error occurred while Registering a User."}'
+        '{"status":"Failed", "statusCode":500, "errorMessage":"Error occurred while updating user."}'
       );
     }
     throw new Error(
@@ -229,7 +232,7 @@ const updateUserRespository = async (_id: mongoose.ObjectId, data: Object) => {
   }
 };
 
-const deleteUserRespository = async (_id: mongoose.ObjectId) => {
+const deleteUserRespository = async (_id: mongoose.Types.ObjectId) => {
   try {
     let user = await userModel
       .findOneAndDelete({ _id })
@@ -249,7 +252,7 @@ const deleteUserRespository = async (_id: mongoose.ObjectId) => {
       err = JSON.parse(err.message);
     } catch (err) {
       throw new Error(
-        '{"status":"Failed", "statusCode":500, "errorMessage":"Error occurred while Registering a User."}'
+        '{"status":"Failed", "statusCode":500, "errorMessage":"Error occurred while deleting a User."}'
       );
     }
     throw new Error(

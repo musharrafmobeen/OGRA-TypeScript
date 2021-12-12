@@ -33,7 +33,7 @@ const getCitiesService = async () => {
   }
 };
 
-const updateCityService = async (_id: mongoose.ObjectId, data: any) => {
+const updateCityService = async (_id: mongoose.Types.ObjectId, data: any) => {
   try {
     return await updateCityRepository(_id, data);
   } catch (err: any) {
@@ -50,7 +50,7 @@ const updateCityService = async (_id: mongoose.ObjectId, data: any) => {
   }
 };
 
-const deleteCityService = async (_id: mongoose.ObjectId) => {
+const deleteCityService = async (_id: mongoose.Types.ObjectId) => {
   try {
     return await deleteCityRepository(_id);
   } catch (err: any) {

@@ -61,7 +61,7 @@ const getDistricts: RequestHandler = async (req, res, next) => {
 const updateDistrict: RequestHandler = async (req, res, next) => {
   try {
     const data = req.body;
-    const _id = new mongoose.Schema.Types.ObjectId(req.params._id);
+    const _id = new mongoose.Types.ObjectId(req.params._id);
     const district = await updateDistrictService(_id, data);
 
     return res.status(200).json({
@@ -88,7 +88,7 @@ const updateDistrict: RequestHandler = async (req, res, next) => {
 
 const deleteDistrict: RequestHandler = async (req, res, next) => {
   try {
-    const _id = new mongoose.Schema.Types.ObjectId(req.params._id);
+    const _id = new mongoose.Types.ObjectId(req.params._id);
     const district = await deleteDistrictService(_id);
 
     return res.status(200).json({

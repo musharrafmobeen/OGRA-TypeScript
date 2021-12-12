@@ -24,12 +24,11 @@ const createAllowedDepotService = async (data: any) => {
 };
 
 const getAllowedDepotsService = async (
-  id: mongoose.ObjectId,
   userRole: string,
-  OMC: mongoose.ObjectId
+  OMC: mongoose.Types.ObjectId
 ) => {
   try {
-    return await getAllowedDepotsRepository(id, userRole, OMC);
+    return await getAllowedDepotsRepository(userRole, OMC);
   } catch (err: any) {
     try {
       err = JSON.parse(err.message);
@@ -44,7 +43,10 @@ const getAllowedDepotsService = async (
   }
 };
 
-const updateAllowedDepotService = async (_id: mongoose.ObjectId, data: any) => {
+const updateAllowedDepotService = async (
+  _id: mongoose.Types.ObjectId,
+  data: any
+) => {
   try {
     return await updateAllowedDepotRepository(_id, data);
   } catch (err: any) {
@@ -61,7 +63,7 @@ const updateAllowedDepotService = async (_id: mongoose.ObjectId, data: any) => {
   }
 };
 
-const deleteAllowedDepotService = async (_id: mongoose.ObjectId) => {
+const deleteAllowedDepotService = async (_id: mongoose.Types.ObjectId) => {
   try {
     return await deleteAllowedDepotRepository(_id);
   } catch (err: any) {

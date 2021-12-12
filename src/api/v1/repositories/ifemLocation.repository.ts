@@ -29,7 +29,7 @@ const addIfemLocationRepository = async (data: any) => {
       err = JSON.parse(err.message);
     } catch (err) {
       throw new Error(
-        '{"status":"Failed", "statusCode":500, "errorMessage":"Error occurred while Registering a User."}'
+        '{"status":"Failed", "statusCode":500, "errorMessage":"Error occurred while Registering new ifem location."}'
       );
     }
     throw new Error(
@@ -44,13 +44,13 @@ const getIfemLocationRepository = async () => {
     return IFEM_Locations;
   } catch (error) {
     throw new Error(
-      '{"status":"Failed", "statusCode":500, "errorMessage":"Error occurred while Registering a User."}'
+      '{"status":"Failed", "statusCode":500, "errorMessage":"Error occurred while getting  ifem locations."}'
     );
   }
 };
 
 const updateIfemLocationRepository = async (
-  _id: mongoose.ObjectId,
+  _id: mongoose.Types.ObjectId,
   data: any
 ) => {
   try {
@@ -69,7 +69,7 @@ const updateIfemLocationRepository = async (
       err = JSON.parse(err.message);
     } catch (err) {
       throw new Error(
-        '{"status":"Failed", "statusCode":500, "errorMessage":"Error occurred while Registering a User."}'
+        '{"status":"Failed", "statusCode":500, "errorMessage":"Error occurred while updating ifem location."}'
       );
     }
     throw new Error(
@@ -78,7 +78,7 @@ const updateIfemLocationRepository = async (
   }
 };
 
-const deleteIfemLocationRepository = async (_id: mongoose.ObjectId) => {
+const deleteIfemLocationRepository = async (_id: mongoose.Types.ObjectId) => {
   try {
     const IFEM_Location = await ifemModel
       .findOneAndUpdate({ _id }, { $set: { isDeleted: true } })
@@ -96,7 +96,7 @@ const deleteIfemLocationRepository = async (_id: mongoose.ObjectId) => {
       err = JSON.parse(err.message);
     } catch (err) {
       throw new Error(
-        '{"status":"Failed", "statusCode":500, "errorMessage":"Error occurred while Registering a User."}'
+        '{"status":"Failed", "statusCode":500, "errorMessage":"Error occurred while deleting ifem location."}'
       );
     }
     throw new Error(

@@ -61,7 +61,7 @@ const getCities: RequestHandler = async (req, res, next) => {
 const updateCity: RequestHandler = async (req, res, next) => {
   try {
     const data = req.body;
-    const _id = new mongoose.Schema.Types.ObjectId(req.params._id);
+    const _id = new mongoose.Types.ObjectId(req.params._id);
     const city = await updateCityService(_id, data);
     return res.status(200).json({
       message: "City Updated",
@@ -87,7 +87,7 @@ const updateCity: RequestHandler = async (req, res, next) => {
 
 const deleteCity: RequestHandler = async (req, res, next) => {
   try {
-    const _id = new mongoose.Schema.Types.ObjectId(req.params._id);
+    const _id = new mongoose.Types.ObjectId(req.params._id);
     const city = await deleteCityService(_id);
 
     return res.status(200).json({

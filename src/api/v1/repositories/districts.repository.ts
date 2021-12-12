@@ -26,7 +26,7 @@ const createDistrictRepository = async (data: any) => {
       err = JSON.parse(err.message);
     } catch (err) {
       throw new Error(
-        '{"status":"Failed", "statusCode":500, "errorMessage":"Error occurred while Creating New Allowed Depot."}'
+        '{"status":"Failed", "statusCode":500, "errorMessage":"Error occurred while Creating New District."}'
       );
     }
     throw new Error(
@@ -41,12 +41,15 @@ const getDistrictsRepository = async () => {
     return districts;
   } catch (error) {
     throw new Error(
-      '{"status":"Failed", "statusCode":500, "errorMessage":"Error occurred while Creating New Allowed Depot."}'
+      '{"status":"Failed", "statusCode":500, "errorMessage":"Error occurred while getting districts."}'
     );
   }
 };
 
-const updateDistrictRepository = async (_id: mongoose.ObjectId, data: any) => {
+const updateDistrictRepository = async (
+  _id: mongoose.Types.ObjectId,
+  data: any
+) => {
   try {
     const district = await districtModel
       .findOneAndUpdate({ _id }, { $set: { ...data } })
@@ -63,7 +66,7 @@ const updateDistrictRepository = async (_id: mongoose.ObjectId, data: any) => {
       err = JSON.parse(err.message);
     } catch (err) {
       throw new Error(
-        '{"status":"Failed", "statusCode":500, "errorMessage":"Error occurred while Creating New Allowed Depot."}'
+        '{"status":"Failed", "statusCode":500, "errorMessage":"Error occurred while updating district."}'
       );
     }
     throw new Error(
@@ -72,7 +75,7 @@ const updateDistrictRepository = async (_id: mongoose.ObjectId, data: any) => {
   }
 };
 
-const deleteDistrictRepository = async (_id: mongoose.ObjectId) => {
+const deleteDistrictRepository = async (_id: mongoose.Types.ObjectId) => {
   try {
     const district = await districtModel.findOneAndDelete({ _id }).exec();
     if (district) {
@@ -87,7 +90,7 @@ const deleteDistrictRepository = async (_id: mongoose.ObjectId) => {
       err = JSON.parse(err.message);
     } catch (err) {
       throw new Error(
-        '{"status":"Failed", "statusCode":500, "errorMessage":"Error occurred while Creating New Allowed Depot."}'
+        '{"status":"Failed", "statusCode":500, "errorMessage":"Error occurred while deleting district."}'
       );
     }
     throw new Error(
