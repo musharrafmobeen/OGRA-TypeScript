@@ -17,7 +17,7 @@ const authentication = (userTypes: string[]) => {
               .findOne({ _id: req.body.id })
               .select("userType OMC")
               .exec();
-            if (req.body.useRole === user.userType) {
+            if (decoded.userType === user.userType) {
               if (req.body.hasOwnProperty("OMC")) {
                 req.body.OMC = req.body.OMC === "" ? user.OMC : req.body.OMC;
               } else {

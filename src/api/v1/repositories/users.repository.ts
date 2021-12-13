@@ -25,7 +25,10 @@ const createUserRespository = async (data: userData) => {
           password: pass,
         });
       await newUser.save();
-      user = await userModel.findOne({ userName: data.userName }).exec();
+      user = await userModel
+        .findOne({ userName: data.userName })
+        .populate("OMC userIFEMLocation deployedDepot primaryDepot")
+        .exec();
       return user;
     } else {
       throw new Error(
@@ -90,7 +93,6 @@ const userLogInRespository = async (data: {
       );
     }
   } catch (err: any) {
-    console.log(err);
     try {
       err = JSON.parse(err.message);
     } catch (err) {

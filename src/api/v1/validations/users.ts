@@ -64,4 +64,21 @@ const userLoginValidation: RequestHandler = async (req, res, next) => {
   }
 };
 
+const getUsersValidation: RequestHandler = async (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({
+      error: {
+        status: "Invalid Data",
+        statusCode: 400,
+        errorMessage: "Data Sent is not valid",
+        errors: errors.array(),
+      },
+      message: "Data Sent is not valid",
+    });
+  } else {
+    next();
+  }
+};
+
 export { addUserValidation, userLoginValidation };
