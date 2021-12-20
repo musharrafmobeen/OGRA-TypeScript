@@ -7,7 +7,9 @@ import { getSecretKey } from "../helpers/environmentVariables";
 
 const createUserRespository = async (data: userData) => {
   try {
-    let user = await userModel.findOne({ userName: data.userName }).exec();
+    console.log("data", data, { userName: data.userName });
+    let user = await userModel.findOne({ userName: data.userName });
+    console.log("user", user);
     if (!user) {
       const pass = bcrypt.hashSync(data.password, 10);
       if (data.userRole !== "OGRA Technical Team") {
@@ -54,7 +56,8 @@ const userLogInRespository = async (data: {
     let userDoc = await userModel
       .findOne({ userName: data.userName })
       .populate("OMC userIFEMLocation deployedDepot primaryDepot")
-      .exec();
+      //@ts-ignore
+      .cache();
 
     if (userDoc) {
       if (bcrypt.compareSync(data.password, userDoc.password)) {

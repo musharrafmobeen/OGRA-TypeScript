@@ -64,4 +64,10 @@ const userLoginValidation: RequestHandler = async (req, res, next) => {
   }
 };
 
-export { addUserValidation, userLoginValidation };
+const check: RequestHandler = async (req, res, next) => {
+  body("userName").isLength({ min: 8, max: 15 }).not().contains(" ");
+  body("password").isLength({ min: 8, max: 15 }).not().contains(" ");
+  next();
+};
+
+export { addUserValidation, userLoginValidation, check };

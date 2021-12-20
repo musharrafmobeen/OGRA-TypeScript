@@ -17,18 +17,23 @@ const authentication = (userTypes: string[]) => {
               .findOne({ _id: req.body.id })
               .select("userType OMC")
               .exec();
-            if (req.body.useRole === user.userType) {
+            console.log(req.body["userRole"], user.userType);
+            console.log(req.body["userRole"] === user.userType);
+
+            if (req.body["userRole"] === user.userType) {
               if (req.body.hasOwnProperty("OMC")) {
                 req.body.OMC = req.body.OMC === "" ? user.OMC : req.body.OMC;
               } else {
                 req.body.OMC = user.OMC;
               }
             } else {
+              console.log("error");
               return res.status(401).json({
                 status: 401,
                 message: "User Is not authorized.",
               });
             }
+            console.log("next function");
             next();
           } else {
             return res.status(401).json({
